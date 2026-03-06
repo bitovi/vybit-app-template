@@ -8,12 +8,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Accordion page without layout (needs full viewport) */}
-        <Route path="/accordion" element={<AccordionPage />} />
+        {/* Accordion page is now the homepage (needs full viewport) */}
+        <Route path="/" element={<AccordionPage />} />
         
-        {/* Regular pages with layout */}
+        {/* Old homepage moved to /home for reference */}
         <Route
-          path="/"
+          path="/home"
           element={
             <Layout>
               <HomePage />

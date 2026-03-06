@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Accordion Page', () => {
   test('loads with correct structure', async ({ page }) => {
-    await page.goto('/accordion');
+    await page.goto('/');
     
     // Check BitoviHeader is visible in first panel
     await expect(page.locator('.bitovi-header')).toBeVisible();
@@ -20,7 +20,7 @@ test.describe('Accordion Page', () => {
   });
 
   test('expands and collapses items on click', async ({ page }) => {
-    await page.goto('/accordion');
+    await page.goto('/');
     
     // Initially, BitoviHeader panel is expanded
     await expect(page.locator('.accordion-item').first()).toHaveClass(/expanded/);
@@ -47,7 +47,7 @@ test.describe('Accordion Page', () => {
   });
 
   test('fills viewport height', async ({ page }) => {
-    await page.goto('/accordion');
+    await page.goto('/');
     
     // Get viewport and accordion dimensions
     const viewportHeight = page.viewportSize()?.height || 0;
@@ -61,7 +61,7 @@ test.describe('Accordion Page', () => {
   test('headers shrink at small viewport heights', async ({ page }) => {
     // Test at 700px height (normal size - default styling)
     await page.setViewportSize({ width: 1280, height: 700 });
-    await page.goto('/accordion');
+    await page.goto('/');
     
     const headerNormal = page.getByRole('button', { name: 'Expand Two' });
     const normalFontSize = await headerNormal.evaluate((el) => 
@@ -109,7 +109,7 @@ test.describe('Accordion Page', () => {
   test('expanded content remains visible at small viewport heights', async ({ page }) => {
     // Test at very small viewport height
     await page.setViewportSize({ width: 1280, height: 350 });
-    await page.goto('/accordion');
+    await page.goto('/');
     
     // Wait for initial render and animation
     await page.waitForTimeout(600);
