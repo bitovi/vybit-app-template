@@ -12,6 +12,8 @@ Ensure all UI features are fully responsive and work correctly across all device
 - Scrollbar and overflow testing
 - Guidelines for providing sufficient data to trigger scrollbars
 
+**Important:** All screenshots generated during verification should be saved to `temp/screenshots/` directory, which is gitignored.
+
 ---
 
 ## Standard Breakpoints
@@ -298,7 +300,7 @@ for (const breakpoint of breakpoints) {
   
   // Take screenshot
   await mcp_playwright_screenshot({
-    name: `feature-${breakpoint.name.toLowerCase()}`,
+    name: `temp/screenshots/feature-${breakpoint.name.toLowerCase()}`,
     savePng: true
   });
   
@@ -340,7 +342,7 @@ await mcp_playwright_evaluate({
 
 // Take screenshot of bottom
 await mcp_playwright_screenshot({
-  name: 'scrolled-to-bottom',
+  name: 'temp/screenshots/scrolled-to-bottom',
   savePng: true
 });
 
@@ -490,7 +492,7 @@ for (const device of devices) {
   
   // Screenshot
   await mcp_playwright_screenshot({
-    name: `jobs-${device.toLowerCase().replace(/\s+/g, '-')}`,
+    name: `temp/screenshots/jobs-${device.toLowerCase().replace(/\s+/g, '-')}`,
     savePng: true
   });
   
@@ -520,7 +522,7 @@ await mcp_playwright_evaluate({
 });
 
 await mcp_playwright_screenshot({
-  name: 'jobs-scrolled-bottom',
+  name: 'temp/screenshots/jobs-scrolled-bottom',
   savePng: true
 });
 

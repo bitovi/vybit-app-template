@@ -47,3 +47,7 @@ playwright-report
 *.mov
 *.avi
 *.mkv
+
+# Temporary test scripts in root
+/test-*.js
+/click-*.js
