@@ -2,18 +2,15 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run Mock App (Dev Server)",
+      "label": "Run App (Dev Server)",
       "type": "shell",
       "command": "npm run dev",
       "isBackground": true,
       "problemMatcher": {
         "pattern": {
-          "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+(TS\\d+)\\s*:\\s*(.*)$",
+          "regexp": ".",
           "file": 1,
-          "location": 2,
-          "severity": 3,
-          "code": 4,
-          "message": 5
+          "message": 0
         },
         "background": {
           "activeOnStart": true,
@@ -21,65 +18,19 @@
           "endsPattern": "(Local|Network):.*"
         }
       },
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "focus": false
-      },
-      "group": {
-        "kind": "build",
-        "isDefault": false
-      }
+      "group": { "kind": "build", "isDefault": false }
     },
     {
       "label": "Run Storybook",
       "type": "shell",
       "command": "npm run storybook",
-      "isBackground": true,
-      "problemMatcher": {
-        "pattern": {
-          "regexp": "^([^\\s].*)\\((\\d+|\\d+,\\d+|\\d+,\\d+,\\d+,\\d+)\\):\\s+(error|warning|info)\\s+(TS\\d+)\\s*:\\s*(.*)$",
-          "file": 1,
-          "location": 2,
-          "severity": 3,
-          "code": 4,
-          "message": 5
-        },
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": ".*building.*",
-          "endsPattern": ".*Storybook.*started.*"
-        }
-      },
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "focus": false
-      }
+      "isBackground": true
     },
     {
-      "label": "Build Mock App",
+      "label": "Build App",
       "type": "shell",
       "command": "npm run build",
-      "problemMatcher": ["$tsc"],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      },
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
-      "label": "Build Storybook",
-      "type": "shell",
-      "command": "npm run build-storybook",
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
+      "group": { "kind": "build", "isDefault": true }
     }
   ]
 }

@@ -54,6 +54,13 @@ Guide the extraction of reusable UI components from inline code patterns. This s
 
 **Goal**: Create a flexible, composable API that covers all use cases.
 
+**Pre-Design**: Review Bitovi design system first:
+- **Design Tokens**: `context/bitovi/DESIGN_TOKENS.md` for colors, spacing, typography
+- **Style Guide**: `context/bitovi/STYLE_GUIDE.md` for component patterns and best practices
+- Use official brand colors (BitOrange #F5532D, Teal variants, Gray scale)
+- Follow established spacing scale (8px, 16px, 24px, 32px, 48px, 64px, 96px)
+- Apply typography hierarchy and font weights
+
 **Guidelines**:
 - **Props**: Use TypeScript discriminated unions for variants
 - **Composition**: Accept `children` for content
@@ -84,6 +91,14 @@ interface ComponentProps extends React.HTMLAttributes<HTMLElement> {
 ### 3. Implement Component
 
 **Location**: `/mock-app/src/components/ui/ComponentName.tsx`
+
+**Design System Application**:
+- Use Bitovi brand colors from `context/bitovi/DESIGN_TOKENS.md`
+- Apply spacing scale consistently (xs: 8px, sm: 16px, md: 24px, lg: 32px, xl: 48px)
+- Follow typography hierarchy (font sizes, weights, line heights)
+- Use border radius values (4px small, 8px medium, 12px large)
+- Apply shadow tokens for elevation
+- Ensure color contrast meets WCAG AA standards
 
 **Structure**:
 ```typescript
@@ -385,6 +400,10 @@ See the implementation workflow:
 ## References
 - `component-registry`: For tracking components and patterns
 - `implement-feature`: When to extract components during feature work
+- **Bitovi Design System**:
+  - **Design Tokens**: `context/bitovi/DESIGN_TOKENS.md` - Official colors, typography, spacing, component tokens
+  - **Style Guide**: `context/bitovi/STYLE_GUIDE.md` - Complete brand guidelines, patterns, visual elements
+  - **Screenshots**: `context/bitovi/*.png` - Visual reference from Bitovi.com
 - **Storybook Docs**: https://storybook.js.org/docs/
 - **React TypeScript Cheatsheet**: https://react-typescript-cheatsheet.netlify.app/
 - **WCAG Guidelines**: https://www.w3.org/WAI/WCAG21/quickref/
@@ -393,7 +412,9 @@ See the implementation workflow:
 
 ## Checklist
 - [ ] Analyzed existing patterns (3-5 examples)
+- [ ] **Reviewed Bitovi design system** (`context/bitovi/DESIGN_TOKENS.md` and `STYLE_GUIDE.md`)
 - [ ] Designed component API (props, variants, sizes)
+- [ ] **Applied Bitovi design tokens** (colors, spacing, typography, shadows)
 - [ ] Implemented component with TypeScript
 - [ ] Created comprehensive Storybook story
 - [ ] Tested in Storybook (all variants, sizes, states)

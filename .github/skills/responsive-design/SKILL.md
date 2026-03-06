@@ -560,6 +560,9 @@ A feature is considered responsive when:
 
 ## Resources
 
+- **Bitovi Design System**:
+  - **Design Tokens**: `context/bitovi/DESIGN_TOKENS.md` - Breakpoints, spacing scale, responsive patterns
+  - **Style Guide**: `context/bitovi/STYLE_GUIDE.md` - Responsive design patterns, mobile-first approach
 - [Tailwind Responsive Design](https://tailwindcss.com/docs/responsive-design)
 - [Playwright MCP Resize Tool](mcp_playwright_resize)
 - [Web Content Accessibility Guidelines - Touch Target Size](https://www.w3.org/WAI/WCAG21/Understanding/target-size.html)

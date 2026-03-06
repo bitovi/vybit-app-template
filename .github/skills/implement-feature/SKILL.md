@@ -51,14 +51,18 @@ Guide the complete implementation of a new feature in the mock-app. This skill i
    - **Rule: If you use the same element 2+ times in YOUR feature, extract it.**
    - **Do this BEFORE building new pages.**
 
-4. **Select UI/UX Pattern**
+4. **Review Design Guidelines & Select UI/UX Pattern**
+   - **Reference design tokens and style guide**: `context/bitovi/DESIGN_TOKENS.md` and `context/bitovi/STYLE_GUIDE.md`
+   - Use official Bitovi brand colors, typography, spacing, and component patterns
    - Use the `UX Pattern Selector` skill (if available) to choose the right UI pattern.
    - Verify all needed reusable components from step 3 now exist (extracted or already available).
 
 5. **Implement UI & Logic**
    - Build new pages in `/mock-app/src/pages` **using only the extracted reusable components**.
+   - **Apply Bitovi design system**: Use colors, typography, spacing from `context/bitovi/DESIGN_TOKENS.md`
    - **NO inline buttons, forms, cards, or repeated patterns** - use components from step 3.
    - Compose new components when needed, always with Storybook stories.
+   - Follow visual patterns and component styles from `context/bitovi/STYLE_GUIDE.md`
 
 6. **Mock Data & API**
    - Update `/mock-app/src/mocks/handlers.ts` to provide mock API responses using sample data from `/model`.
@@ -94,27 +98,28 @@ Guide the complete implementation of a new feature in the mock-app. This skill i
 - `generate-sample-data`: For mock/sample data in `/model/*.sample.ts`.
 - `component-registry`: **For tracking and managing reusable components and patterns**.
 - `create-skill`: For documenting new workflows or skills.
+- **Bitovi Design System**:
+  - **Design Tokens**: `context/bitovi/DESIGN_TOKENS.md` - Official colors, typography, spacing, component tokens
+  - **Style Guide**: `context/bitovi/STYLE_GUIDE.md` - Complete brand guidelines, patterns, visual elements
+  - **Screenshots**: `context/bitovi/*.png` - Visual reference from Bitovi.com
 - **Component Registry**: `.github/skills/component-registry/REGISTRY.md` - Check this FIRST!
 - **Reusable Components**: Place in `/mock-app/src/components/ui`, with a Storybook story.
 - **Playwright MCP**: For automated UI verification and E2E test generation.
 
 ---
-Component Registry reviewed** (`.github/skills/component-registry/REGISTRY.md`)
+- [ ] **Component Registry reviewed** (`.github/skills/component-registry/REGISTRY.md`)
 - [ ] **Patterns marked ⚠️ NEEDS EXTRACTION extracted FIRST** (before building UI)
-- [ ] **New reusable components extracted** (Button, Card, Badge, etc.)
-- [ ] **Storybook story created for EACH component** before using in pages
-- [ ] UI pattern selectedr story)
-- [ ] Data model updated in `/model` (Zod schema + sample data)
-- [ ] **Reusable components extracted FIRST** (Button, Card, Badge, Table, etc.)
+- [ ] **Bitovi design system reviewed** (`context/bitovi/DESIGN_TOKENS.md` and `STYLE_GUIDE.md`)
+- [ ] **New reusable components extracted** (Button, Card, Badge, etc.) following Bitovi design patterns
 - [ ] **Storybook story created for EACH component** before using in pages
 - [ ] UI pattern selected via UX Pattern Selector
+- [ ] Data model updated in `/model` (Zod schema + sample data)
 - [ ] Sample data generated (minimum 15-20 items for lists/tables)
 - [ ] **Pages built using ONLY reusable components** (no inline buttons/forms/cards)
+- [ ] **Bitovi design tokens applied** (colors, typography, spacing from design system)
 - [ ] **Component Registry updated** with new components and observed patterns
-- [ ] Documentation/skills updated if new patterns/convention
 - [ ] Playwright MCP used to verify feature and stories
 - [ ] **Responsive design verified using `responsive-design` skill** (mobile, tablet, desktop)
-- [ ] **Scrollbar behavior tested** (vertical scroll with 15-20+ items, no horizontal overflow)th 15-20+ items, no horizontal overflow)
-- [ ] Playwright MCP used to verify feature and stories
+- [ ] **Scrollbar behavior tested** (vertical scroll with 15-20+ items, no horizontal overflow)
 - [ ] E2E tests generated for all new flows (tests should verify the mock app can demo the feature, not real implementation correctness)
 - [ ] Documentation/skills updated if new patterns/components added
