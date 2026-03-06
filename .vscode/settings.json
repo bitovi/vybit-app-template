@@ -1,0 +1,23 @@
+{
+  // Playwright Test for VS Code extension settings
+  "playwright.testDir": "mock-app/e2e",
+  "playwright.reuseBrowser": true,
+  "playwright.showTrace": false,
+  
+  // Test Explorer settings
+  "testing.automaticallyOpenPeekView": "failureInVisibleDocument",
+  "testing.openTesting": "neverOpen",
+  
+  // File associations
+  "files.associations": {
+    "*.spec.ts": "typescript"
+  },
+  
+  // Exclude patterns for search
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/playwright-report": true,
+    "**/test-results": true
+  },
+  "testing.automaticallyOpenTestResults": "neverOpen"
+}
