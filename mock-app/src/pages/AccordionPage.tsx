@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { BitoviHeader, HeroSection } from '../components/ui';
+import { BitoviHeader, HeroSection, ServicesList, PartnersList, ClientsList, CalendarBooking } from '../components/ui';
 
 const accordionItems = [
   { id: 1, isHeader: true, hasHeroContent: true },
-  { id: 2, title: "The hard problems we're working on now", content: "" },
-  { id: 3, title: "Our problem-solving partners", content: "" },
-  { id: 4, title: "We've solved hard problems for", content: "" },
-  { id: 5, title: "Tell us about the problem you need solving", content: "" },
+  { id: 2, title: "The hard problems we are solving:", hasServicesList: true },
+  { id: 3, title: "Our hard problem partners:", hasPartnersList: true },
+  { id: 4, title: "We've solved hard problems for:", hasClientsList: true },
+  { id: 5, title: "Tell us about the problem you need solving:", hasCalendarBooking: true },
 ];
 
 export default function AccordionPage() {
@@ -48,7 +48,9 @@ export default function AccordionPage() {
                 onClick={() => handleToggle(item.id)}
                 aria-expanded={isExpanded}
               >
-                {item.title}
+                <div className="accordion-header-content">
+                  {item.title}
+                </div>
               </button>
             )}
             {item.hasHeroContent && (
@@ -57,6 +59,38 @@ export default function AccordionPage() {
                 aria-hidden={!isExpanded}
               >
                 <HeroSection />
+              </div>
+            )}
+            {item.hasServicesList && (
+              <div 
+                className="accordion-content"
+                aria-hidden={!isExpanded}
+              >
+                <ServicesList />
+              </div>
+            )}
+            {item.hasPartnersList && (
+              <div 
+                className="accordion-content"
+                aria-hidden={!isExpanded}
+              >
+                <PartnersList />
+              </div>
+            )}
+            {item.hasClientsList && (
+              <div 
+                className="accordion-content"
+                aria-hidden={!isExpanded}
+              >
+                <ClientsList />
+              </div>
+            )}
+            {item.hasCalendarBooking && (
+              <div 
+                className="accordion-content"
+                aria-hidden={!isExpanded}
+              >
+                <CalendarBooking />
               </div>
             )}
             {item.content && (
