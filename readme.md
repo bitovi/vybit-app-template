@@ -8,7 +8,7 @@ Most vibe-coded apps fall apart as they get bigger: styles drift, data shapes co
 
 **Design system via agent skills** — Copilot skills automatically extract reusable components into a [Storybook](https://storybook.js.org/) component library, maintain a component registry, and keep your UI visually consistent. You don't have to think about it — just ask for a feature and the skill handles the rest.
 
-**Centralized data model** — This template maintains a shared data model so every feature Copilot builds stays compatible with the rest of the app. Without it, AI invents its own data shapes for each page — fields get named differently, structures contradict each other, and nothing connects.
+**Centralized data model** — This template maintains a shared data model so every feature Copilot builds stays compatible with the rest of the app. Without it, AI invents its own data shapes for different features — fields get named differently, structures contradict each other, and nothing connects.
 
 **Self-verifying with Playwright** — The template includes Playwright MCP so Copilot can write and run E2E tests as it builds features. Multiple people can edit the app without silently breaking each other's work.
 
@@ -55,7 +55,11 @@ Behind the scenes, the **implement-feature** skill will:
 - Extract shared UI components
 - Write Playwright tests
 
-You can also use **VyBit** to point at elements in your running app, drag-drop components, or sketch features visually.
+You can also use **VyBit** to point at elements in your running app, drag-drop components, or sketch features visually. To activate VyBit, tell Copilot:
+
+> "Please implement the next change and continue implementing changes with VyBit."
+
+This starts a loop where Copilot waits for you to make visual changes, commits them, and implements them — all without leaving your browser.
 
 ### Other skills
 
