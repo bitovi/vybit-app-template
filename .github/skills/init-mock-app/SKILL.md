@@ -25,13 +25,15 @@ Scaffold a complete, production-shaped project that mirrors the existing `mock-a
 | Framework       | React                         | 18      |
 | Language        | TypeScript                    | 5       |
 | Bundler         | Vite                          | 5       |
-| Styling         | Tailwind CSS                  | 3       |
+| Styling         | Tailwind CSS (Vite plugin)    | 4       |
 | Routing         | React Router DOM              | 6       |
 | Mock API        | MSW (Mock Service Worker)     | 2       |
 | Model types     | Zod + `@model` path alias     | 3       |
+| Unit testing    | Vitest + Testing Library      | 3 / 16  |
 | E2E testing     | Playwright                    | 1       |
 | Component dev   | Storybook                     | 8       |
 | Sample data     | @anatine/zod-mock + Faker     | —       |
+| Dev tooling     | VyBit overlay                 | —       |
 
 ## Complete Directory Structure
 
@@ -54,8 +56,7 @@ Replace `<app-dir>` with the desired name (default: `mock-app`). This is the **f
 │   ├── settings.json
 │   └── tasks.json
 ├── package.json
-├── tailwind.config.js
-├── postcss.config.js
+├── vitest.config.ts
 ├── playwright.config.ts
 ├── model/
 │   ├── README.md
@@ -82,11 +83,22 @@ Replace `<app-dir>` with the desired name (default: `mock-app`). This is the **f
         ├── App.tsx
         ├── App.css
         ├── index.css
+        ├── test-setup.ts
         ├── vite-env.d.ts
         ├── components/
         │   ├── Layout.tsx
         │   └── ui/
-        │       └── index.ts
+        │       ├── index.ts
+        │       ├── Button.tsx
+        │       ├── Button.stories.tsx
+        │       ├── Input.tsx
+        │       ├── Input.stories.tsx
+        │       ├── Textarea.tsx
+        │       ├── Textarea.stories.tsx
+        │       ├── Badge.tsx
+        │       ├── Badge.stories.tsx
+        │       ├── Modal.tsx
+        │       └── Modal.stories.tsx
         ├── features/
         │   └── .gitkeep
         ├── pages/
@@ -110,32 +122,11 @@ Use the template at [templates/package.json](./templates/package.json).
 
 Replace every occurrence of `mock-app` with `<app-dir>` if the user chose a different name.
 
-#### `tailwind.config.js`
+#### `vitest.config.ts`
 
-```javascript
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./<app-dir>/index.html",
-    "./<app-dir>/src/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-```
+Use the template at [templates/vitest.config.ts](./templates/vitest.config.ts).
 
-#### `postcss.config.js`
-
-```javascript
-export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-}
-```
+Replace `mock-app` with `<app-dir>` if needed.
 
 #### `playwright.config.ts`
 
@@ -149,11 +140,15 @@ Replace `mock-app` with `<app-dir>` if needed.
 
 Use the template at [templates/Dockerfile](./templates/Dockerfile).
 
+Installs Playwright chromium for **both** `@playwright/test` and `@playwright/mcp` (via `playwright-core`), ensuring E2E tests and the Playwright MCP server both work out of the box in containers.
+
 #### `.devcontainer/devcontainer.json`
 
 Use the template at [templates/devcontainer.json](./templates/devcontainer.json).
 
 Replace `mock-app` with `<app-dir>` if needed.
+
+Forwards ports 3333 (VyBit), 5173 (Vite), and 6006 (Storybook). Sets `PLAYWRIGHT_MCP_HEADLESS` and `PLAYWRIGHT_MCP_NO_SANDBOX` remote environment variables for reliable headless Playwright MCP operation in containers.
 
 ### Step 3 — `.vscode/` config
 
@@ -192,6 +187,13 @@ Replace `mock-app` with `<app-dir>` if needed.
         "-y",
         "@modelcontextprotocol/server-filesystem",
         "${workspaceFolder}"
+      ]
+    },
+    "vybit": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@nickvybit/vybit-mcp@latest"
       ]
     }
   }
@@ -232,9 +234,12 @@ Replace `mock-app` with `<app-dir>` if needed.
       "isBackground": true,
       "problemMatcher": {
         "pattern": {
-          "regexp": ".",
+          "regexp": "^(.+)\\((\\d+,\\d+)\\):\\s+(error|warning)\\s+(TS\\d+):\\s+(.+)$",
           "file": 1,
-          "message": 0
+          "location": 2,
+          "severity": 3,
+          "code": 4,
+          "message": 5
         },
         "background": {
           "activeOnStart": true,
@@ -242,19 +247,44 @@ Replace `mock-app` with `<app-dir>` if needed.
           "endsPattern": "(Local|Network):.*"
         }
       },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": false
+      },
       "group": { "kind": "build", "isDefault": false }
     },
     {
       "label": "Run Storybook",
       "type": "shell",
       "command": "npm run storybook",
-      "isBackground": true
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": false
+      }
     },
     {
       "label": "Build App",
       "type": "shell",
       "command": "npm run build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": false
+      },
       "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "Build Storybook",
+      "type": "shell",
+      "command": "npm run build-storybook",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": false
+      }
     }
   ]
 }
@@ -333,6 +363,7 @@ export * from './enums';
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script src="http://localhost:3333/overlay.js"></script>
   </body>
 </html>
 ```
@@ -342,10 +373,11 @@ export * from './enums';
 ```typescript
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       '@model': path.resolve(__dirname, '../model'),
@@ -375,6 +407,7 @@ export default defineConfig({
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
+    "types": ["vitest/globals", "@testing-library/jest-dom"],
     "paths": {
       "@model": ["../model/index"],
       "@model/*": ["../model/*"]
@@ -406,12 +439,14 @@ export default defineConfig({
 /// <reference types="vite/client" />
 ```
 
+#### `<app-dir>/src/test-setup.ts`
+
+Use the template at [templates/test-setup.ts](./templates/test-setup.ts).
+
 #### `<app-dir>/src/index.css`
 
 ```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 ```
 
 #### `<app-dir>/src/App.css`
@@ -503,16 +538,16 @@ export default function Layout({ children }: LayoutProps) {
 }
 ```
 
-#### `<app-dir>/src/components/ui/index.ts`
+#### `<app-dir>/src/components/ui/`
 
-```typescript
-/**
- * Shared UI Component Barrel Export
- *
- * Re-export all shared UI components from here.
- * Example: export { Button } from './Button';
- */
-```
+Copy all files from [templates/ui/](./templates/ui/) into `<app-dir>/src/components/ui/`:
+
+- `index.ts` — barrel export for all UI components
+- `Button.tsx` + `Button.stories.tsx` — variants (primary, secondary, outline, ghost, destructive), sizes (sm, md, lg), loading state, `forwardRef`
+- `Input.tsx` + `Input.stories.tsx` — label, error/helper text, accessible IDs, `forwardRef`
+- `Textarea.tsx` + `Textarea.stories.tsx` — label, error/helper text, accessible IDs, `forwardRef`
+- `Badge.tsx` + `Badge.stories.tsx` — variants (default, success, warning, danger, info), sizes (sm, md, lg)
+- `Modal.tsx` + `Modal.stories.tsx` — sizes (sm, md, lg, xl), Escape to close, backdrop click, scroll lock
 
 #### `<app-dir>/src/pages/HomePage.tsx`
 
@@ -663,6 +698,9 @@ npx playwright install chromium
 npm run dev
 # (open browser → should see "Hello World")
 
+# Unit tests
+npm test
+
 # Storybook
 npm run storybook
 
@@ -676,11 +714,11 @@ This scaffold is designed so every project skill works immediately:
 
 | Skill | What it needs | Provided by scaffold |
 |-------|--------------|---------------------|
-| **component-registry** | `src/components/ui/`, `REGISTRY.md` | ✅ `ui/index.ts` barrel + `REGISTRY.md` |
+| **component-registry** | `src/components/ui/`, `REGISTRY.md` | ✅ `ui/` with Button, Input, Textarea, Badge, Modal + `REGISTRY.md` |
 | **create-skill** | `.github/skills/` directory | ✅ Exists via component-registry |
 | **debug-e2e-test** | `e2e/` dir, `playwright.config.ts` | ✅ Both created |
 | **document-feature** | `wiki/product-management/features/`, `model/` | ✅ Both created |
-| **extract-ui-component** | `src/components/ui/`, Storybook config | ✅ `ui/index.ts` + `.storybook/` |
+| **extract-ui-component** | `src/components/ui/`, Storybook config | ✅ `ui/` with components + `.storybook/` |
 | **generate-sample-data** | `model/`, `@anatine/zod-mock`, `@faker-js/faker` | ✅ All present |
 | **implement-feature** | `src/features/`, all of the above | ✅ All present |
 | **responsive-design** | Tailwind, Playwright | ✅ Both configured |
@@ -699,9 +737,11 @@ After scaffolding, the user will likely want to:
 
 ## Common Mistakes to Avoid
 
-- **Forgetting `tailwind.config.js`** — Tailwind won't generate classes without content paths
+- **Using Tailwind v3 directives** — Tailwind v4 uses `@import "tailwindcss"` instead of `@tailwind base/components/utilities`. No `tailwind.config.js` or `postcss.config.js` needed.
 - **Skipping `npx msw init`** — MSW needs its service worker file in `public/`
 - **Defining types outside `/model`** — Always use the `@model` alias; never create local interfaces for domain entities
 - **Missing `.storybook/preview.ts` CSS import** — Storybook won't render Tailwind classes without it
 - **Not installing Playwright browsers** — `npx playwright install chromium` is required before running E2E tests
-- **Forgetting `postcss.config.js`** — Required for Tailwind's PostCSS processing
+- **Forgetting `vitest.config.ts`** — Unit tests won't run without the root-level Vitest config
+- **Missing `test-setup.ts`** — Testing Library matchers (`.toBeInTheDocument()` etc.) require the setup file importing `@testing-library/jest-dom/vitest`
+- **Omitting `@tailwindcss/vite` plugin** — Tailwind v4 requires the Vite plugin in `vite.config.ts` instead of PostCSS config

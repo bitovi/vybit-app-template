@@ -2,8 +2,6 @@
 applyTo: '**'
 ---
 
-# Western Carolina Discovery - Copilot Instructions
-
 ## Data Model Architecture
 
 ### Single Source of Truth: `/model` Directory

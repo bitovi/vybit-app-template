@@ -5,8 +5,12 @@
   },
   "updateContentCommand": "npm install && npx playwright install --with-deps chromium",
   "postStartCommand": "npm run dev",
-  "forwardPorts": [5173, 6006],
+  "forwardPorts": [3333, 5173, 6006],
   "portsAttributes": {
+    "3333": {
+      "label": "VyBit",
+      "onAutoForward": "ignore"
+    },
     "5173": {
       "label": "Vite Dev Server",
       "onAutoForward": "openPreview"
