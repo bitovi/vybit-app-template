@@ -10,11 +10,15 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
-      if (location.hostname === 'localhost') {
-        const s = document.createElement('script');
-        s.src = 'http://localhost:3333/overlay.js';
+      (function () {
+        var name = '%CODESPACE_NAME%';
+        var domain = '%GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN%';
+        var s = document.createElement('script');
+        s.src = (name.indexOf('%') === -1)
+          ? 'https://' + name + '-3333.' + domain + '/overlay.js'
+          : 'http://localhost:3333/overlay.js';
         document.head.appendChild(s);
-      }
+      })();
     </script>
   </body>
 </html>
