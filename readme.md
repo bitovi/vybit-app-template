@@ -61,6 +61,8 @@ You can also use **[VyBit](https://github.com/bitovi/vybit)** — a visual edito
 
 This starts a loop where Copilot waits for you to make visual changes in the editor, commits them, and implements them — all without leaving your browser.
 
+![VyBit editor overlay](https://github.com/user-attachments/assets/59b8e280-a827-4fa0-95e3-6c350afacbc9)
+
 ### Other skills
 
 - **update-data-model** — Add fields or entities to `/model`
