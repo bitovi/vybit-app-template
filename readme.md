@@ -55,11 +55,11 @@ Behind the scenes, the **implement-feature** skill will:
 - Extract shared UI components
 - Write Playwright tests
 
-You can also use **VyBit** to point at elements in your running app, drag-drop components, or sketch features visually. To activate VyBit, tell Copilot:
+You can also use **[VyBit](https://github.com/bitovi/vybit)** — a visual editor overlay for your React app — to click elements, drag-drop components, or sketch features. To activate VyBit, tell Copilot:
 
 > "Please implement the next change and continue implementing changes with VyBit."
 
-This starts a loop where Copilot waits for you to make visual changes, commits them, and implements them — all without leaving your browser.
+This starts a loop where Copilot waits for you to make visual changes in the editor, commits them, and implements them — all without leaving your browser.
 
 ### Other skills
 
