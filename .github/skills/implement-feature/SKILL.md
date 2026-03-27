@@ -17,9 +17,17 @@ Guide the complete implementation of a new feature in the mock-app. This skill i
 ---
 
 ## When to Use
-- Building a new UI-driven feature, page, or workflow in the mock-app
+
+**Load this skill for ANY of the following — there are no exceptions for "simple" or "small" changes:**
+
+- Adding a new page or route
+- Adding or editing navigation (nav bar, sidebar, breadcrumbs, links)
+- Adding any new UI element that appears more than once (buttons, badges, inputs, cards, etc.)
+- Editing an existing page's content or layout
+- Building a new UI-driven feature or workflow
 - Adding or updating domain logic, UI, or sample data (mock only)
-- Ensuring new features follow project conventions and leverage reusable components
+
+> **Why no exceptions?** Small UI changes are exactly where components get inlined instead of extracted, stories get skipped, and the registry goes stale. The cost of loading this skill is low; the cost of skipping it compounds.
 
 **Do not use this skill to build server-side, backend, or production API code. All features must be mock, UI-driven, and client-side only.**
 

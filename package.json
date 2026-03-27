@@ -1,0 +1,57 @@
+{
+  "name": "my-mock-app",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite mock-app",
+    "build": "tsc -p mock-app && vite build mock-app",
+    "preview": "vite preview mock-app",
+    "storybook": "storybook dev -p 6006 -c mock-app/.storybook",
+    "build-storybook": "storybook build -c mock-app/.storybook",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:chromium": "playwright test --project=chromium",
+    "test:e2e:report": "playwright show-report"
+  },
+  "dependencies": {
+    "lucide-react": "^0.575.0",
+    "msw": "^2.1.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@anatine/zod-mock": "^3.14.0",
+    "@faker-js/faker": "^9.9.0",
+    "@playwright/test": "^1.58.2",
+    "@storybook/addon-essentials": "^8.0.0",
+    "@storybook/addon-interactions": "^8.0.0",
+    "@storybook/addon-links": "^8.0.0",
+    "@storybook/blocks": "^8.0.0",
+    "@storybook/react": "^8.0.0",
+    "@storybook/react-vite": "^8.0.0",
+    "@storybook/test": "^8.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
+    "@vitejs/plugin-react": "^4.2.1",
+    "jsdom": "^26.1.0",
+    "storybook": "^8.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.0",
+    "vitest": "^3.2.1"
+  },
+  "msw": {
+    "workerDirectory": [
+      "mock-app/public"
+    ]
+  }
+}

@@ -24,6 +24,10 @@ This registry tracks reusable UI components in the mock-app.
 - **Path**: `/mock-app/src/components/ui/Modal.tsx`
 - **Description**: Dialog/modal overlay component for displaying content in a popup. Supports multiple sizes (sm, md, lg, xl, 2xl), optional title, keyboard navigation (Escape to close), backdrop click handling, and scroll lock. Includes comprehensive Storybook stories.
 
+### Navigation
+- **Path**: `/mock-app/src/components/Navigation.tsx`
+- **Description**: Top-of-page nav bar with configurable brand name and nav items. Uses React Router `NavLink` for active-link highlighting. Includes Storybook stories.
+
 ### ProcessingStatusBadge
 - **Path**: `/mock-app/src/features/spectral-analysis-processing/ProcessingStatusBadge.tsx`
 - **Description**: Domain-specific badge for displaying job processing status with color coding
