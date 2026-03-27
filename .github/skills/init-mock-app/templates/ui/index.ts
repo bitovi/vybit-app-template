@@ -2,4 +2,3 @@ export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from '.
 export { Input, type InputProps } from './Input';
 export { Textarea, type TextareaProps } from './Textarea';
 export { Badge, type BadgeProps, type BadgeVariant, type BadgeSize } from './Badge';
-export { Modal, type ModalProps, type ModalSize } from './Modal';

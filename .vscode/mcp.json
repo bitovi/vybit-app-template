@@ -18,6 +18,12 @@
         "@modelcontextprotocol/server-filesystem",
         "${workspaceFolder}"
       ]
+    },
+    "vybit": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@bitovi/vybit"],
+      "cwd": "${workspaceFolder}/mock-app"
     }
   }
 }

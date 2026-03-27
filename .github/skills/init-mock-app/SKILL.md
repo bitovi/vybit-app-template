@@ -87,6 +87,8 @@ Replace `<app-dir>` with the desired name (default: `mock-app`). This is the **f
         ├── vite-env.d.ts
         ├── components/
         │   ├── Layout.tsx
+        │   ├── Navigation.tsx
+        │   ├── Navigation.stories.tsx
         │   └── ui/
         │       ├── index.ts
         │       ├── Button.tsx
@@ -96,13 +98,12 @@ Replace `<app-dir>` with the desired name (default: `mock-app`). This is the **f
         │       ├── Textarea.tsx
         │       ├── Textarea.stories.tsx
         │       ├── Badge.tsx
-        │       ├── Badge.stories.tsx
-        │       ├── Modal.tsx
-        │       └── Modal.stories.tsx
+        │       └── Badge.stories.tsx
         ├── features/
         │   └── .gitkeep
         ├── pages/
-        │   └── HomePage.tsx
+        │   ├── HomePage.tsx
+        │   └── AboutPage.tsx
         └── mocks/
             ├── browser.ts
             └── handlers.ts
@@ -190,11 +191,10 @@ Forwards ports 3333 (VyBit), 5173 (Vite), and 6006 (Storybook). Sets `PLAYWRIGHT
       ]
     },
     "vybit": {
+      "type": "stdio",
       "command": "npx",
-      "args": [
-        "-y",
-        "@nickvybit/vybit-mcp@latest"
-      ]
+      "args": ["@bitovi/vybit"],
+      "cwd": "${workspaceFolder}/<app-dir>"
     }
   }
 }
@@ -363,7 +363,13 @@ export * from './enums';
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script src="http://localhost:3333/overlay.js"></script>
+    <script>
+      if (location.hostname === 'localhost') {
+        const s = document.createElement('script');
+        s.src = 'http://localhost:3333/overlay.js';
+        document.head.appendChild(s);
+      }
+    </script>
   </body>
 </html>
 ```
@@ -492,6 +498,7 @@ enableMocking().then(() => {
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
 import './App.css';
 
 function App() {
@@ -500,7 +507,7 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          {/* Add more routes here */}
+          <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
@@ -511,11 +518,98 @@ function App() {
 export default App;
 ```
 
+#### `<app-dir>/src/components/Navigation.tsx`
+
+```tsx
+import { Link, NavLink } from 'react-router-dom';
+
+export interface NavItem {
+  label: string;
+  to: string;
+}
+
+export interface NavigationProps {
+  brand?: string;
+  items?: NavItem[];
+}
+
+const defaultItems: NavItem[] = [
+  { label: 'Home', to: '/' },
+  { label: 'About', to: '/about' },
+];
+
+export function Navigation({ brand = 'My App', items = defaultItems }: NavigationProps) {
+  return (
+    <header className="bg-white border-b border-slate-200 px-6 py-4">
+      <nav className="flex items-center gap-6">
+        <Link to="/" className="text-lg font-semibold text-slate-800 mr-4">
+          {brand}
+        </Link>
+        {items.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.to === '/'}
+            className={({ isActive }) =>
+              isActive
+                ? 'text-sm font-medium text-blue-600'
+                : 'text-sm font-medium text-slate-600 hover:text-slate-900'
+            }
+          >
+            {item.label}
+          </NavLink>
+        ))}
+      </nav>
+    </header>
+  );
+}
+```
+
+#### `<app-dir>/src/components/Navigation.stories.tsx`
+
+```tsx
+import { MemoryRouter } from 'react-router-dom';
+import type { Meta, StoryObj } from '@storybook/react';
+import { Navigation } from './Navigation';
+
+const meta = {
+  title: 'Components/Navigation',
+  component: Navigation,
+  tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <MemoryRouter initialEntries={['/']}>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
+} satisfies Meta<typeof Navigation>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};
+
+export const CustomBrand: Story = {
+  args: { brand: 'Acme Corp' },
+};
+
+export const CustomItems: Story = {
+  args: {
+    items: [
+      { label: 'Home', to: '/' },
+      { label: 'Dashboard', to: '/dashboard' },
+      { label: 'Settings', to: '/settings' },
+    ],
+  },
+};
+```
+
 #### `<app-dir>/src/components/Layout.tsx`
 
 ```tsx
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Navigation } from './Navigation';
 
 interface LayoutProps {
   children: ReactNode;
@@ -524,14 +618,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 px-6 py-4">
-        <nav className="flex items-center gap-6">
-          <Link to="/" className="text-lg font-semibold text-slate-800">
-            My App
-          </Link>
-          {/* Add nav links here */}
-        </nav>
-      </header>
+      <Navigation />
       <main className="p-6">{children}</main>
     </div>
   );
@@ -540,23 +627,112 @@ export default function Layout({ children }: LayoutProps) {
 
 #### `<app-dir>/src/components/ui/`
 
-Copy all files from [templates/ui/](./templates/ui/) into `<app-dir>/src/components/ui/`:
+Copy all files from [templates/ui/](./templates/ui/) into `<app-dir>/src/components/ui/`, **excluding** `Modal.tsx` and `Modal.stories.tsx`:
 
-- `index.ts` — barrel export for all UI components
+- `index.ts` — barrel export for all UI components (omit Modal export)
 - `Button.tsx` + `Button.stories.tsx` — variants (primary, secondary, outline, ghost, destructive), sizes (sm, md, lg), loading state, `forwardRef`
 - `Input.tsx` + `Input.stories.tsx` — label, error/helper text, accessible IDs, `forwardRef`
 - `Textarea.tsx` + `Textarea.stories.tsx` — label, error/helper text, accessible IDs, `forwardRef`
 - `Badge.tsx` + `Badge.stories.tsx` — variants (default, success, warning, danger, info), sizes (sm, md, lg)
-- `Modal.tsx` + `Modal.stories.tsx` — sizes (sm, md, lg, xl), Escape to close, backdrop click, scroll lock
+
+Update `index.ts` to remove the Modal export line.
+
+#### `<app-dir>/src/pages/AboutPage.tsx`
+
+```tsx
+export default function AboutPage() {
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-slate-800 mb-4">About</h1>
+      <p className="text-slate-600">This is the about page. Add your content here.</p>
+    </div>
+  );
+}
+```
 
 #### `<app-dir>/src/pages/HomePage.tsx`
 
+The home page serves as a **design system showcase** so developers can immediately see all available UI components:
+
 ```tsx
+import { useState } from 'react';
+import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
+import { Textarea } from '../components/ui/Textarea';
+import { Badge } from '../components/ui/Badge';
+
 export default function HomePage() {
+  const [inputValue, setInputValue] = useState('');
+  const [textareaValue, setTextareaValue] = useState('');
+
   return (
-    <div>
-      <h1 className="text-3xl font-bold text-slate-800 mb-4">Hello World</h1>
-      <p className="text-slate-600">Your app is running. Start building!</p>
+    <div className="max-w-3xl space-y-10">
+      <div>
+        <h1 className="text-3xl font-bold text-slate-800 mb-2">Design System</h1>
+        <p className="text-slate-600">A showcase of available UI components.</p>
+      </div>
+
+      {/* Buttons */}
+      <section>
+        <h2 className="text-lg font-semibold text-slate-700 mb-4">Button</h2>
+        <div className="flex flex-wrap gap-3">
+          <Button variant="primary">Primary</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="destructive">Destructive</Button>
+          <Button size="sm">Small</Button>
+          <Button size="lg">Large</Button>
+          <Button loading>Loading</Button>
+          <Button disabled>Disabled</Button>
+        </div>
+      </section>
+
+      {/* Badges */}
+      <section>
+        <h2 className="text-lg font-semibold text-slate-700 mb-4">Badge</h2>
+        <div className="flex flex-wrap gap-3">
+          <Badge>Default</Badge>
+          <Badge variant="success">Success</Badge>
+          <Badge variant="warning">Warning</Badge>
+          <Badge variant="danger">Danger</Badge>
+          <Badge variant="info">Info</Badge>
+          <Badge size="sm">Small</Badge>
+          <Badge size="lg">Large</Badge>
+        </div>
+      </section>
+
+      {/* Input */}
+      <section>
+        <h2 className="text-lg font-semibold text-slate-700 mb-4">Input</h2>
+        <div className="space-y-4 max-w-sm">
+          <Input
+            label="Default"
+            placeholder="Enter text..."
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <Input label="With helper text" placeholder="you@example.com" helperText="We'll never share your email." />
+          <Input label="With error" value="bad input" error="This field is invalid" readOnly />
+          <Input label="Disabled" value="Cannot edit" disabled />
+        </div>
+      </section>
+
+      {/* Textarea */}
+      <section>
+        <h2 className="text-lg font-semibold text-slate-700 mb-4">Textarea</h2>
+        <div className="space-y-4 max-w-sm">
+          <Textarea
+            label="Default"
+            placeholder="Enter text..."
+            value={textareaValue}
+            onChange={(e) => setTextareaValue(e.target.value)}
+          />
+          <Textarea label="With helper text" helperText="Max 500 characters." />
+          <Textarea label="With error" value="bad input" error="This field is required" readOnly />
+          <Textarea label="Disabled" value="Cannot edit" disabled />
+        </div>
+      </section>
     </div>
   );
 }
@@ -600,6 +776,7 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
     '@storybook/addon-links',
+    '@bitovi/vybit/storybook-addon',
   ],
   framework: {
     name: '@storybook/react-vite',
@@ -638,9 +815,14 @@ export default preview;
 import { test, expect } from '@playwright/test';
 
 test.describe('Smoke Test', () => {
-  test('homepage loads with hello world', async ({ page }) => {
+  test('homepage loads with design system heading', async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('heading', { name: /hello world/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /design system/i })).toBeVisible();
+  });
+
+  test('about page loads', async ({ page }) => {
+    await page.goto('/about');
+    await expect(page.getByRole('heading', { name: /about/i })).toBeVisible();
   });
 });
 ```
@@ -658,7 +840,25 @@ Create a minimal version using the [copilot-instructions template](./templates/c
 
 ## Extracted Components
 
-*No components extracted yet.*
+### Button
+- **Path**: `/mock-app/src/components/ui/Button.tsx`
+- **Description**: Reusable button with variants (primary, secondary, outline, ghost, destructive) and sizes (sm, md, lg). Includes loading state, disabled state, full TypeScript types, and Storybook stories.
+
+### Badge
+- **Path**: `/mock-app/src/components/ui/Badge.tsx`
+- **Description**: Inline label/tag with variants (default, success, warning, danger, info) and sizes (sm, md, lg). Includes Storybook stories.
+
+### Input
+- **Path**: `/mock-app/src/components/ui/Input.tsx`
+- **Description**: Text input with optional label, error message, and helper text. Accessible IDs, `forwardRef`. Includes Storybook stories.
+
+### Textarea
+- **Path**: `/mock-app/src/components/ui/Textarea.tsx`
+- **Description**: Textarea with optional label, error message, and helper text. Accessible IDs, `forwardRef`. Includes Storybook stories.
+
+### Navigation
+- **Path**: `/mock-app/src/components/Navigation.tsx`
+- **Description**: Top-of-page nav bar with configurable brand name and nav items. Uses React Router `NavLink` for active-link highlighting. Includes Storybook stories.
 
 ## Unextracted Patterns
 
@@ -677,7 +877,10 @@ Empty file — placeholder for feature modules.
 
 ```bash
 npm install
+npm install --save-dev @bitovi/vybit
 ```
+
+> `@bitovi/vybit` must be installed as a local dev dependency so Storybook can resolve the `@bitovi/vybit/storybook-addon`. The MCP server itself runs via `npx` so no global install is needed.
 
 ### Step 10 — Generate the MSW service worker
 
@@ -696,7 +899,7 @@ npx playwright install chromium
 ```bash
 # Dev server
 npm run dev
-# (open browser → should see "Hello World")
+# (open browser → should see "Design System" showcase on the home page)
 
 # Unit tests
 npm test
@@ -714,7 +917,7 @@ This scaffold is designed so every project skill works immediately:
 
 | Skill | What it needs | Provided by scaffold |
 |-------|--------------|---------------------|
-| **component-registry** | `src/components/ui/`, `REGISTRY.md` | ✅ `ui/` with Button, Input, Textarea, Badge, Modal + `REGISTRY.md` |
+| **component-registry** | `src/components/ui/`, `REGISTRY.md` | ✅ `ui/` with Button, Input, Textarea, Badge + Navigation + pre-populated `REGISTRY.md` |
 | **create-skill** | `.github/skills/` directory | ✅ Exists via component-registry |
 | **debug-e2e-test** | `e2e/` dir, `playwright.config.ts` | ✅ Both created |
 | **document-feature** | `wiki/product-management/features/`, `model/` | ✅ Both created |
@@ -729,7 +932,7 @@ This scaffold is designed so every project skill works immediately:
 
 After scaffolding, the user will likely want to:
 
-- **Add pages**: Create files in `src/pages/`, add `<Route>` entries in `App.tsx`, add `<Link>` entries in `Layout.tsx`
+- **Add pages**: Create files in `src/pages/`, add `<Route>` entries in `App.tsx`, add items to the `defaultItems` array in `Navigation.tsx`
 - **Add mock API handlers**: Edit `src/mocks/handlers.ts` with new `http.get()`/`http.post()` entries
 - **Import model types**: `import type { ... } from '@model'` — path alias is pre-configured
 - **Add a login flow**: Wrap routing in auth state similar to `mock-app/src/App.tsx`
