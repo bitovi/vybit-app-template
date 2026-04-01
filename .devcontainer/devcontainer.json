@@ -9,7 +9,8 @@
   "portsAttributes": {
     "3333": {
       "label": "VyBit",
-      "onAutoForward": "ignore"
+      "onAutoForward": "ignore",
+      "visibility": "public"
     },
     "5173": {
       "label": "Vite Dev Server",
