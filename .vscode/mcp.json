@@ -22,7 +22,7 @@
     "vybit": {
       "type": "stdio",
       "command": "npx",
-      "args": ["@bitovi/vybit"],
+      "args": ["@bitovi/vybit@latest"],
       "cwd": "${workspaceFolder}/mock-app"
     }
   }
