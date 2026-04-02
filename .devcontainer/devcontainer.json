@@ -4,7 +4,10 @@
     "dockerfile": "Dockerfile"
   },
   "updateContentCommand": "npm install && npx playwright install --with-deps chromium",
-  "postStartCommand": "npm run dev",
+  "postStartCommand": {
+    "dev": "npm run dev",
+    "storybook": "npm run storybook"
+  },
   "forwardPorts": [3333, 5173, 6006],
   "portsAttributes": {
     "3333": {
