@@ -11,13 +11,11 @@
     <script type="module" src="/src/main.tsx"></script>
     <script type="module">
       (function () {
-        var name = import.meta.env.CODESPACE_NAME || "";
-        var domain = import.meta.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN || "";
         var s = document.createElement("script");
-        s.src =
-          name && domain
-            ? "https://" + name + "-3333." + domain + "/overlay.js"
-            : "http://localhost:3333/overlay.js";
+        s.src = "/overlay.js";
+        s.onerror = function () {
+          console.warn("VyBit overlay is unavailable at /overlay.js");
+        };
         document.head.appendChild(s);
       })();
     </script>

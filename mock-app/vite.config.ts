@@ -5,7 +5,15 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  envPrefix: ['VITE_', 'CODESPACE_', 'GITHUB_CODESPACES_'],
+  envPrefix: ["VITE_", "CODESPACE_", "GITHUB_CODESPACES_"],
+  server: {
+    proxy: {
+      "/overlay.js": {
+        target: "http://127.0.0.1:3333",
+        changeOrigin: true,
+      },
+    },
+  },
   resolve: {
     alias: {
       "@model": path.resolve(__dirname, "../model"),
