@@ -11,6 +11,11 @@ export default defineConfig({
       "/overlay.js": {
         target: "http://127.0.0.1:3333",
         changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on("proxyRes", (proxyRes) => {
+            proxyRes.headers["content-type"] = "application/javascript";
+          });
+        },
       },
     },
   },
