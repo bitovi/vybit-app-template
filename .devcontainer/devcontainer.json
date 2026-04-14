@@ -5,8 +5,7 @@
   },
   "updateContentCommand": "npm install && npx playwright install --with-deps chromium",
   "postStartCommand": {
-    "dev": "npm run dev",
-    "storybook": "npm run storybook"
+    "dev": "npm run dev"
   },
   "forwardPorts": [3333, 5173, 6006],
   "portsAttributes": {
