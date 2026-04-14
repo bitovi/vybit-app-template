@@ -12,6 +12,14 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  viteFinal: (config) => {
+    if (config.server) {
+      config.server.hmr = {
+        clientPort: 443,
+      };
+    }
+    return config;
+  },
 };
 
 export default config;
