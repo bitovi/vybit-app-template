@@ -23,7 +23,10 @@
       "type": "stdio",
       "command": "npx",
       "args": ["@bitovi/vybit@latest"],
-      "cwd": "${workspaceFolder}/mock-app"
+      "cwd": "${workspaceFolder}/mock-app",
+      "env": {
+        "VYBIT_DEBUG": "true"
+      }
     }
   }
 }
