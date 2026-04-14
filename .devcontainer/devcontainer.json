@@ -21,7 +21,8 @@
     },
     "6006": {
       "label": "Storybook",
-      "onAutoForward": "ignore"
+      "onAutoForward": "openPreview",
+      "visibility": "public"
     }
   },
   "customizations": {
