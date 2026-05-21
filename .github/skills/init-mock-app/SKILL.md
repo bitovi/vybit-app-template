@@ -33,7 +33,7 @@ Scaffold a complete, production-shaped project that mirrors the existing `mock-a
 | E2E testing     | Playwright                    | 1       |
 | Component dev   | Storybook                     | 8       |
 | Sample data     | @anatine/zod-mock + Faker     | —       |
-| Dev tooling     | VyBit overlay                 | —       |
+| Dev tooling     | Convey overlay                | —       |
 
 ## Complete Directory Structure
 
@@ -149,7 +149,7 @@ Use the template at [templates/devcontainer.json](./templates/devcontainer.json)
 
 Replace `mock-app` with `<app-dir>` if needed.
 
-Forwards ports 3333 (VyBit), 5173 (Vite), and 6006 (Storybook). Sets `PLAYWRIGHT_MCP_HEADLESS` and `PLAYWRIGHT_MCP_NO_SANDBOX` remote environment variables for reliable headless Playwright MCP operation in containers.
+Forwards ports 3333 (Convey), 5173 (Vite), and 6006 (Storybook). Sets `PLAYWRIGHT_MCP_HEADLESS` and `PLAYWRIGHT_MCP_NO_SANDBOX` remote environment variables for reliable headless Playwright MCP operation in containers.
 
 ### Step 3 — `.vscode/` config
 
@@ -190,10 +190,10 @@ Forwards ports 3333 (VyBit), 5173 (Vite), and 6006 (Storybook). Sets `PLAYWRIGHT
         "${workspaceFolder}"
       ]
     },
-    "vybit": {
+    "convey": {
       "type": "stdio",
       "command": "npx",
-      "args": ["@bitovi/vybit"],
+      "args": ["@bitovi/convey"],
       "cwd": "${workspaceFolder}/<app-dir>"
     }
   }
@@ -776,7 +776,7 @@ const config: StorybookConfig = {
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
     '@storybook/addon-links',
-    '@bitovi/vybit/storybook-addon',
+    '@bitovi/convey/storybook-addon',
   ],
   framework: {
     name: '@storybook/react-vite',
@@ -877,10 +877,10 @@ Empty file — placeholder for feature modules.
 
 ```bash
 npm install
-npm install --save-dev @bitovi/vybit
+npm install --save-dev @bitovi/convey
 ```
 
-> `@bitovi/vybit` must be installed as a local dev dependency so Storybook can resolve the `@bitovi/vybit/storybook-addon`. The MCP server itself runs via `npx` so no global install is needed.
+> `@bitovi/convey` must be installed as a local dev dependency so Storybook can resolve the `@bitovi/convey/storybook-addon`. The MCP server itself runs via `npx` so no global install is needed.
 
 ### Step 10 — Generate the MSW service worker
 

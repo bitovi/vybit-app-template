@@ -1,4 +1,4 @@
-# VyBit App Template
+# Convey App Template
 
 Vibe code a UI that stays consistent as it grows. Fork this repo, open a Codespace, and start building — the dev server launches automatically.
 
@@ -36,8 +36,8 @@ Prebuilds pre-install everything so future Codespaces launch in seconds:
 ### Local dev (optional)
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/vybit-app-template.git
-cd vybit-app-template
+git clone https://github.com/YOUR-USERNAME/convey-app-template.git
+cd convey-app-template
 npm install
 npm run dev
 ```
@@ -55,13 +55,13 @@ Behind the scenes, the **implement-feature** skill will:
 - Extract shared UI components
 - Write Playwright tests
 
-You can also use **[VyBit](https://github.com/bitovi/vybit)** — a visual editor overlay for your React app — to click elements, drag-drop components, or sketch features. To activate VyBit, tell Copilot:
+You can also use **[Convey](https://github.com/bitovi/convey)** — a visual editor overlay for your React app — to click elements, drag-drop components, or sketch features. To activate Convey, tell Copilot:
 
-> "Please implement the next change and continue implementing changes with VyBit."
+> "Please implement the next change and continue implementing changes with Convey."
 
 This starts a loop where Copilot waits for you to make visual changes in the editor, commits them, and implements them — all without leaving your browser.
 
-![VyBit editor overlay](https://github.com/user-attachments/assets/59b8e280-a827-4fa0-95e3-6c350afacbc9)
+![Convey editor overlay](https://github.com/user-attachments/assets/59b8e280-a827-4fa0-95e3-6c350afacbc9)
 
 ### Other skills
 
