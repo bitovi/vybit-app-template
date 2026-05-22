@@ -19,13 +19,13 @@
         "${workspaceFolder}"
       ]
     },
-    "vybit": {
+    "convey": {
       "type": "stdio",
       "command": "npx",
-      "args": ["@bitovi/vybit@latest"],
+      "args": ["@bitovi/convey@latest"],
       "cwd": "${workspaceFolder}/mock-app",
       "env": {
-        "VYBIT_DEBUG": "true"
+        "CONVEY_DEBUG": "true"
       }
     }
   }
