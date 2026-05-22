@@ -3,6 +3,7 @@
   "build": {
     "dockerfile": "Dockerfile"
   },
+  "remoteUser": "node",
   "updateContentCommand": "npm install && npx playwright install --with-deps chromium",
   "postStartCommand": {
     "dev": "npm run dev"
