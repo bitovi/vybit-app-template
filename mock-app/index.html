@@ -9,16 +9,16 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
+    <script type="module">
       (function () {
+        var name = import.meta.env.CODESPACE_NAME || "";
+        var domain =
+          import.meta.env.GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN || "";
         var s = document.createElement("script");
-        // Detect GitHub Codespaces by hostname: {name}-{port}.{domain}
-        var match = window.location.hostname.match(
-          /^(.+)-\d+(\.app\.github\.dev|\.preview\.app\.github\.dev)$/
-        );
-        s.src = match
-          ? "https://" + match[1] + "-3333" + match[2] + "/overlay.js"
-          : "http://localhost:3333/overlay.js";
+        s.src =
+          name && domain
+            ? "https://" + name + "-3333." + domain + "/overlay.js"
+            : "http://localhost:3333/overlay.js";
         s.onerror = function () {
           console.warn("Convey overlay is unavailable at port 3333");
         };

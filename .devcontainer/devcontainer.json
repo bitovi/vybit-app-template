@@ -6,7 +6,8 @@
   "remoteUser": "node",
   "updateContentCommand": "npm install && npx playwright install --with-deps chromium",
   "postStartCommand": {
-    "dev": "npm run dev"
+    "dev": "npm run dev",
+    "convey": "npx convey"
   },
   "forwardPorts": [3333, 5173, 6006],
   "portsAttributes": {
